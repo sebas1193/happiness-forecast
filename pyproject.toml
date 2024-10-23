@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "workshop-003"
+version = "0.1.0"
+description = ""
+authors = ["sebas1193 <juansebasitan05@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+numpy = "^2.1.2"
+pandas = "^2.2.3"
+kafka-python = "^2.0.2"
+seaborn = "^0.13.2"
+matplotlib = "^3.9.2"
+psycopg = "^3.2.3"
+scikit-learn = "^1.5.2"
+sqlalchemy = "^2.0.36"
+notebook = "^7.2.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -16,6 +16,8 @@ psycopg = "^3.2.3"
 scikit-learn = "^1.5.2"
 sqlalchemy = "^2.0.36"
 notebook = "^7.2.2"
+country-converter = "^1.2"
+geopandas = "^1.0.1"
 
 
 [build-system]

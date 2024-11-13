@@ -6,7 +6,7 @@ import six
   
 def selected_features(df=None):
     if df is None:
-        df = pd.read_csv("../data/happiness_dataset_merged.csv")
+        df = pd.read_csv("./data/happiness_dataset_merged.csv")
         df['continent_numeric'] = pd.factorize(df['continent'])[0]
         
     # Select numerical columns and drop unwanted columns

@@ -3,6 +3,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:13
+    container_name: postgres-w3
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -15,9 +16,12 @@ services:
       retries: 5
       start_period: 5s
     restart: always
+    ports:
+      - "5432:5432"
 
   pgadmin:
     image: dpage/pgadmin4
+    container_name: pgadmin-w3
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${POSTGRES_PASSWORD}    
@@ -29,7 +33,7 @@ services:
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper
+    container_name: zookeeper-w3
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -52,15 +56,5 @@ services:
     ports:
       - "9092:9092"
 
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      KAFKA_BROKER_URL: "localhost:9092"  
-    depends_on:
-      - kafka
-    command: ["python", "kafka_consumer.py"]
-    restart: always
 volumes:
   postgres-db-volume:

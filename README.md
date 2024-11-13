@@ -21,7 +21,8 @@ The workflow includes data ingestion, feature selection, model training, real-ti
 │   └── xgboost_model.joblib
 ├── notebooks
 │   ├── 001_EDA.ipynb
-|   └── 002_model_eval.ipynb
+|   ├── 002_feature_engineering.ipynb
+|   └── 003_model_evaluation.ipynb
 │
 ├── pyproject.toml
 ├── requirements.txt

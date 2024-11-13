@@ -21,7 +21,7 @@ The workflow includes data ingestion, feature selection, model training, real-ti
 │   └── xgboost_model.joblib
 ├── notebooks
 │   ├── 001_EDA.ipynb
-|   └──002_model_eval.ipynb
+|   └── 002_model_eval.ipynb
 │
 ├── pyproject.toml
 ├── requirements.txt
@@ -54,43 +54,32 @@ This project requires the following tools and libraries:
 Create a file named `.env` in the project’s root directory (where `docker-compose.yaml` is located) with the following structure:
 
 ```plaintext
-
 POSTGRES_USER=your_user
-
 POSTGRES_PASSWORD=your_password
-
 POSTGRES_DB=your_db
-
 HOST=localhost
-
 PGADMIN_DEFAULT_EMAIL=your_email
-
 ```
 
 # Virtual Enviroment:
 
-### With Poetry:
+## With Poetry:
 
 ```
-
 poetry install
-
 ```
 
 Once all dependencies are installed, activate the environment:
 
 ```
-
 poetry shell
-
 ```  
+---
 
-### With Virtual Environment (venv):
+## With Virtual Environment (venv):
 
 ```
-
 python3 -m venv venv
-
 ```
 
 ### Activate the virtual environment:
@@ -98,34 +87,27 @@ python3 -m venv venv
 On Windows:
 
 ```
-
 venv\Scripts\activate
-
 ```
 
 On macOS/Linux:
 
 ```
-
 source venv/bin/activate
-
 ```
 
 Then:
 ```
-
 pip install -r requirements.txt
-
 ```
 
+---
 # Start Docker Containers
 
 Run the following command to build and start Docker containers:
 
 ```
-
 docker-compose up --build -d
-
 ```
 
 # Enable Kafka Streaming
@@ -133,17 +115,13 @@ docker-compose up --build -d
 After starting Docker, access the Kafka container:
 
 ```
-
 docker exec -it kafka-w3 bash
-
 ```
 
 Create the Kafka topic:
 
 ```
-
 kafka-topics --bootstrap-server kafka-w3:9092 --create --topic kafka-happiness
-
 ```
 
 # Run Kafka Consumer and Producer
@@ -153,21 +131,17 @@ In two separate terminal windows, start the Kafka consumer first, followed by th
 Start the consumer:
 
 ```
-
 python kafka_consumer.py
-
 ```
 
 Start the producer:
 
 ```
-
 python kafka_producer.py
-
 ```
 
 ⚠️ Important: Always ensure your virtual environment (Poetry or venv) is activated. Otherwise, the scripts may not run correctly.
 
 # Evaluate Model Performance
 
-Once streaming is complete, run the 002_model_eval.ipynb notebook to assess the model's performance.
+Once streaming is complete, run the 003_model_eval.ipynb notebook to assess the model's performance.

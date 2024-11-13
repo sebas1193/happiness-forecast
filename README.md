@@ -13,49 +13,25 @@ The workflow includes data ingestion, feature selection, model training, real-ti
 ```
 
 .
-
 ├── README.md
-
 ├── docker-compose.yaml
-
-├── dockerfile
-
 ├── kafka_consumer.py
-
 ├── kafka_producer.py
-
 ├── models
-
 │   └── xgboost_model.joblib
-
 ├── notebooks
-
 │   ├── 001_EDA.ipynb
-
 |   └──002_model_eval.ipynb
-
 │
-
-├── poetry.lock
-
 ├── pyproject.toml
-
 ├── requirements.txt
-
 ├── utils
-
 │   ├── data_explorer.py
-
 │   ├── db_postgres.py
-
 │   ├── kafka.py
-
 │   ├── ne_110m_admin_0_countries.zip
-
 │   └── ww_gif_generator.py
-
 └── visualizations
-
     └── happiness_score_smooth.gif
 
 ```
@@ -135,6 +111,7 @@ source venv/bin/activate
 
 ```
 
+Then:
 ```
 
 pip install -r requirements.txt

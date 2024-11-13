@@ -3,9 +3,14 @@ import pandas as pd
 import psycopg2
 import os
 from dotenv import load_dotenv, find_dotenv
+import logging
 
+# Load environment variables
 dotenv_path = find_dotenv(filename='../.env')
 load_dotenv(dotenv_path)
+
+# Basic logging configuration
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def create_connection():
     try:
@@ -16,22 +21,25 @@ def create_connection():
             password=os.getenv("POSTGRES_PASSWORD"),
             database=os.getenv("POSTGRES_DB")
         )
+        logging.info('✔ Connected to PostgreSQL')
+        return cnx  # Return the connection object
     except psycopg2.Error as e:
-        cnx = None
-        print('Unable to connect:', e)
-    return cnx
+        logging.error("✖ Error to connect", e)
+        return None
+
 
 def create_table():
     create_table_query = '''
-    CREATE TABLE IF NOT EXISTS world_happiness(
+    DROP TABLE IF EXISTS world_happiness;
+    CREATE TABLE world_happiness(
         id SERIAL PRIMARY KEY,
-        country VARCHAR(255) NOT NULL,
-        happiness_score FLOAT NOT NULL,
-        gdp_per_capita FLOAT NOT NULL,
-        social_support FLOAT NOT NULL,
-        freedom FLOAT NOT NULL,
+        GDP_per_capita FLOAT NOT NULL,
         life_expectancy FLOAT NOT NULL,
-        happiness_prediction FLOAT NOT NULL
+        freedom FLOAT NOT NULL,
+        perceptions_corruption FLOAT NOT NULL,
+        continent_numeric INTEGER NOT NULL,
+        happiness_prediction FLOAT NOT NULL,
+        happiness_score FLOAT NOT NULL
     )
     '''
     cnx = None
@@ -41,16 +49,17 @@ def create_table():
         cur.execute(create_table_query)
         cur.close()
         cnx.commit()
-        print('Table created successfully')
+        logging.info('✔ Table created successfully')
     except (Exception, psycopg2.DatabaseError) as error:
-        print('Error creating table: %s', error)
+        logging.error(f'✖ Error creating table: {error}')
     finally:
         if cnx is not None:
             cnx.close()
 
+
 def insert_data(row):
     insert_query = """
-        INSERT INTO world_happiness (country, happiness_score, gdp_per_capita, social_support, freedom, life_expectancy, happiness_prediction)
+        INSERT INTO world_happiness (GDP_per_capita, life_expectancy, freedom, perceptions_corruption, continent_numeric, happiness_prediction, happiness_score)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
     """
     cnx = None
@@ -58,22 +67,21 @@ def insert_data(row):
         cnx = create_connection()
         cur = cnx.cursor()
         values = (
-            row['country'],
-            row['happiness_score'],
-            row['GDP_per_capita'],
-            row['social_support'],
-            row['freedom'],
-            row['life_expectancy'],
-            row['happiness_prediction']
+            float(row['GDP_per_capita']),
+            float(row['life_expectancy']),
+            float(row['freedom']),
+            float(row['perceptions_corruption']),
+            int(row['continent_numeric']),
+            float(row['happiness_prediction']),
+            float(row['happiness_score'])
         )
         cur.execute(insert_query, values)
         cnx.commit()
     except Exception as error:
-        print('Error during data insertion:', error)
+        logging.error(f'✖ Error during data insertion: {error}')
     finally:
         if cnx is not None:
             cnx.close()
-
 
 def run_query(sql):
     cnx = create_connection()
@@ -86,6 +94,18 @@ def run_query(sql):
     cnx.close()
     return df
 
+def get_all_data():
+    """
+    Fetch all data from the world_happiness table and return it as a pandas DataFrame.
+    """
+    query = "SELECT * FROM world_happiness"
+    try:
+        df = run_query(query)
+        logging.info('✔ Data fetched successfully')
+        return df
+    except Exception as error:
+        logging.error(f'✖ Error fetching data: {error}')
+        return pd.DataFrame()  # Return an empty DataFrame in case of error
 
 
 

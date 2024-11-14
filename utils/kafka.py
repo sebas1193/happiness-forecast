@@ -34,7 +34,8 @@ def kafka_consumer():
                                                         'life_expectancy',
                                                         'freedom',
                                                         'perceptions_corruption',
-                                                        'continent_numeric']])
+                                                        'continent_numeric',
+                                                        'country_numeric']])
         insert_data(df.iloc[0])
         logging.info("Data inserted into PostgreSQL and Data:\n%s", df)
 

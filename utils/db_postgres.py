@@ -38,6 +38,7 @@ def create_table():
         freedom FLOAT NOT NULL,
         perceptions_corruption FLOAT NOT NULL,
         continent_numeric INTEGER NOT NULL,
+        country_numeric INTEGER NOT NULL,
         happiness_prediction FLOAT NOT NULL,
         happiness_score FLOAT NOT NULL
     )
@@ -59,8 +60,8 @@ def create_table():
 
 def insert_data(row):
     insert_query = """
-        INSERT INTO world_happiness (GDP_per_capita, life_expectancy, freedom, perceptions_corruption, continent_numeric, happiness_prediction, happiness_score)
-        VALUES (%s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO world_happiness (GDP_per_capita, life_expectancy, freedom, perceptions_corruption, continent_numeric, country_numeric, happiness_prediction, happiness_score)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     """
     cnx = None
     try:
@@ -72,16 +73,19 @@ def insert_data(row):
             float(row['freedom']),
             float(row['perceptions_corruption']),
             int(row['continent_numeric']),
+            int(row['country_numeric']),
             float(row['happiness_prediction']),
             float(row['happiness_score'])
         )
         cur.execute(insert_query, values)
         cnx.commit()
+        logging.info(f"✔ Data inserted: {values}")
     except Exception as error:
-        logging.error(f'✖ Error during data insertion: {error}')
+        logging.error(f'✖ Error during data insertion: {error}. Data: {row}')
     finally:
         if cnx is not None:
             cnx.close()
+
 
 def run_query(sql):
     cnx = create_connection()
